@@ -1,0 +1,156 @@
+
+
+/* ---------------------------------------------------------- IMPORTS */
+
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Press+Start+2P&display=swap');
+
+
+/* -------------------------------------------------------- VARIABLES */
+
+
+:root {
+	--main-font-family: 'JetBrains Mono', monospace;
+	--alternative-font-family: 'Press Start 2P', cursive;
+	--calculator-font-color: #FFFFFF;
+	--calculator-background-color: #FFFFFF;
+	--calculator-display-background-color: hsl(100deg, 100%, 80%);
+	--btn-num-background-color: hsl(0deg, 100%, 80%);
+	--btn-num-background-color-hover: hsl(0deg, 100%, 70%);
+	--btn-operator-background-color-1: hsl(200deg, 100%, 80%);
+	--btn-operator-background-color-1-hover: hsl(200deg, 100%, 70%);
+	--btn-operator-background-color-2: hsl(50deg, 100%, 80%);
+	--btn-operator-background-color-2-hover: hsl(50deg, 100%, 70%);
+}
+
+
+/* ------------------------------------------------------------ RESET */
+
+
+*,
+*::before,
+*::after {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-size: 10px;
+}
+
+button {
+	font: inherit;
+}
+
+img,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+/* ---------------------------------------------------------- GENERAL */
+
+
+body {
+	background-color: #FFFFFF;
+	color: #000;
+	font: 1.6rem var(--main-font-family);
+}
+
+body.container {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	height: 100vh;
+	width: 100vw;
+}
+
+
+/* ------------------------------------------------------- CALCULATOR */
+
+
+#calculator {
+	aspect-ratio: .75;
+	background-color: var(--calculator-background-color);
+	column-gap: 5px;
+	display: grid;
+	grid-auto-rows: 1fr;
+	grid-template-areas: 'display display display display'
+											 'btn-clear btn-negative btn-percentage btn-divide'
+											 'btn-num7 btn-num8 btn-num9 btn-multiply'
+											 'btn-num4 btn-num5 btn-num6 btn-subtract'
+											 'btn-num1 btn-num2 btn-num3 btn-add'
+											 'btn-num0 btn-num0 btn-decimal btn-equal';
+	height: 25vw;
+	row-gap: 5px;
+}
+
+#calculator,
+#calculator * {
+	color: var(--calculator-font-color);
+	font-family: var(--alternative-font-family);
+	text-shadow: 2px 2px 0 hsla(0, 0%, 0%, 25%);
+}
+
+.calculator-display {
+	align-items: center;
+	background-color: var(--calculator-display-background-color);
+	display: flex;
+	font-size: 2em;
+	grid-area: display;
+	justify-content: flex-end;
+	padding: 0 15px;
+}
+
+[class*='btn-'] {
+	font-weight: bold;
+	transition: all .5s ease-in-out;
+}
+
+[class*='btn-']:hover,
+[class*='btn-']:focus {
+	cursor: pointer;
+}
+
+[class*='btn-num'],
+.btn-decimal {
+	background-color: var(--btn-num-background-color);
+}
+
+:is([class*='btn-num'], .btn-decimal):hover,
+:is([class*='btn-num'], .btn-decimal):focus {
+	background-color: var(--btn-num-background-color-hover);
+}
+
+.btn-clear,
+.btn-negative,
+.btn-percentage {
+	background-color: var(--btn-operator-background-color-1);
+}
+
+:is(.btn-clear, .btn-negative, .btn-percentage):hover,
+:is(.btn-clear, .btn-negative, .btn-percentage):focus {
+	background-color: var(--btn-operator-background-color-1-hover);
+}
+
+.btn-divide,
+.btn-multiply,
+.btn-subtract,
+.btn-add,
+.btn-equal {
+	background-color: var(--btn-operator-background-color-2);
+}
+
+:is(.btn-divide, .btn-multiply, .btn-subtract, .btn-add, .btn-equal):hover,
+:is(.btn-divide, .btn-multiply, .btn-subtract, .btn-add, .btn-equal):hover {
+	background-color: var(--btn-operator-background-color-2-hover);
+}
