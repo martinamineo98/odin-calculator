@@ -17,10 +17,13 @@
 	--calculator-display-background-color: hsl(100deg, 100%, 80%);
 	--btn-num-background-color: hsl(0deg, 100%, 80%);
 	--btn-num-background-color-hover: hsl(0deg, 100%, 70%);
+	--btn-num-background-color-active: hsl(0deg, 100%, 60%);
 	--btn-operator-background-color-1: hsl(200deg, 100%, 80%);
 	--btn-operator-background-color-1-hover: hsl(200deg, 100%, 70%);
+	--btn-operator-background-color-1-active: hsl(200deg, 100%, 60%);
 	--btn-operator-background-color-2: hsl(50deg, 100%, 80%);
 	--btn-operator-background-color-2-hover: hsl(50deg, 100%, 70%);
+	--btn-operator-background-color-2-active: hsl(50deg, 100%, 60%);
 }
 
 
@@ -85,7 +88,7 @@ body.container {
 	display: grid;
 	grid-auto-rows: 1fr;
 	grid-template-areas: 'display display display display'
-											 'btn-clear btn-clear btn-percentage btn-divide'
+											 'btn-clear btn-negative btn-percentage btn-divide'
 											 'btn-num7 btn-num8 btn-num9 btn-multiply'
 											 'btn-num4 btn-num5 btn-num6 btn-subtract'
 											 'btn-num1 btn-num2 btn-num3 btn-add'
@@ -144,6 +147,10 @@ body.container {
 	background-color: var(--btn-num-background-color-hover);
 }
 
+:is([class*='btn-num'], .btn-decimal):active {
+	background-color: var(--btn-num-background-color-active);
+}
+
 .btn-clear,
 .btn-negative,
 .btn-percentage {
@@ -153,6 +160,10 @@ body.container {
 :is(.btn-clear, .btn-negative, .btn-percentage):hover,
 :is(.btn-clear, .btn-negative, .btn-percentage):focus {
 	background-color: var(--btn-operator-background-color-1-hover);
+}
+
+:is(.btn-clear, .btn-negative, .btn-percentage):active {
+	background-color: var(--btn-operator-background-color-1-active);
 }
 
 .btn-divide,
@@ -166,4 +177,8 @@ body.container {
 :is(.btn-divide, .btn-multiply, .btn-subtract, .btn-add, .btn-equal):hover,
 :is(.btn-divide, .btn-multiply, .btn-subtract, .btn-add, .btn-equal):hover {
 	background-color: var(--btn-operator-background-color-2-hover);
+}
+
+:is(.btn-divide, .btn-multiply, .btn-subtract, .btn-add, .btn-equal):active {
+	background-color: var(--btn-operator-background-color-2-active);
 }

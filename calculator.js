@@ -7,22 +7,34 @@
 
 const operatorBtns = []
 
-function Operator(name, symbol, fun) {
+function Operator(name, symbol, fun, symbolOnDisplay = true) {
 	this.name = name
 	this.symbol = symbol
 	this.fun = fun
+	this.symbolOnDisplay = symbolOnDisplay
 	
 	operatorBtns.push(this)
 }
 
-let addBtn = new Operator('add', '+', function(a, b) {return a + b})
-let subtractBtn = new Operator('subtract', '-', function(a, b) {return a - b})
-let multiplyBtn = new Operator('multiply', '*', function(a, b) {return a * b})
-let divideBtn = new Operator('divide', '÷', function(a, b) {return a * b})
-let percentageBtn = new Operator('percentage', '%', function(a) {divideBtn.fun(a, 100)})
-// let negativeBtn = new Operator('negative', '+/-', function(a) {return -a})
-let equalBtn = new Operator('equal', '=', function(e) {console.log(e)})
-let clearBtn = new Operator('clear', 'ac', function(e) {console.log(e)})
+let add = new Operator('add', '+', function(a, b) {return a + b})
+let subtract = new Operator('subtract', '-', function(a, b) {return a - b})
+let multiply = new Operator('multiply', '*', function(a, b) {return a * b})
+let divide = new Operator('divide', '÷', function(a, b) {return a * b})
+let percentage = new Operator('percentage', '%', function(a) {divideBtn.fun(a, 100)})
+let negative = new Operator('negative', '+/-', function(a) {return -a})
+let equal = new Operator('equal', '=', (str) => {addToDisplayResultStr(str)}, false)
+
+let clear = new Operator('clear', 'ac', function() {
+	num1 = ''
+	num2 = ''
+	result = ''
+	
+	displayOperationStr = ''
+	displayResultStr = ''
+	
+	updateDisplayOperationStr('')
+	updateDisplayResultStr('')
+}, false)
 
 // 2) We need to populate the #calculator div with buttons for each number
 //		and each operator. 
@@ -38,6 +50,7 @@ const container = document.querySelector('#calculator')
 				
 				numBtn.addEventListener('click', () => {
 					addNumberToString(index)
+					addToDisplayOperationStr(index)
 				})
 		
 		container.appendChild(numBtn)
@@ -52,7 +65,10 @@ const container = document.querySelector('#calculator')
 				btn.textContent = `${operatorBtns[index].symbol}`
 				
 				btn.addEventListener('click', () => {
-					operate(operatorBtns[index].fun)
+					operate(operatorBtns[index])
+					if (operatorBtns[index].symbolOnDisplay) {
+						addToDisplayOperationStr(operatorBtns[index].symbol)
+					}
 				})
 				
 		container.appendChild(btn)
@@ -104,8 +120,42 @@ let num2 = ''
 let result = ''
 let chosenOperation
 
-function operate(fun) {
+let previousChosenOperation
+
+// I evaluate the first two values and then, the result becomes the new
+// first value. The second value becomes ''.
+
+function operate(operation = previousChosenOperation) {
+	let num1Float = parseFloat(num1)
+	let num2Float = parseFloat(num2)
 	
+	chosenOperation = operation
+	
+	if (num2.length > 0) {
+		if (operation.fun.length > 1) {
+			result = operation.fun(num1Float, num2Float)
+			previousChosenOperation = operation.fun
+			chosenOperation = null
+			num1 = result
+			num2 = ''
+		}
+	}
+	
+	if (operation.name == 'clear') {
+		operation.fun()
+	}
+	
+	if (operation.name == 'equal') {
+		if (num1.length == 0 && num2.length == 0) {
+			operation.fun(0)
+		}
+		
+		if (num2.length > 0) {
+			operation.fun(result)
+		}
+	}
+
+	console.log(result)
 }
 
 // 4.1) To verify in which variable I need to insert the number, I created
@@ -144,4 +194,30 @@ function addDecimalPointToString() {
 
 function checkIfStringContains(x, y) {
 	return x.includes(y)
+}
+
+// 5) Populate the Display
+
+const displayOperation = container.querySelector('.calculator-display-operation')
+const displayResult = container.querySelector('.calculator-display-operation')
+
+let displayOperationStr = ''
+let displayResultStr = ''
+
+function addToDisplayOperationStr(str) {
+	displayOperationStr += `${str} `
+	updateDisplayOperationStr()
+}
+
+function addToDisplayResultStr(str) {
+	displayResultStr += `${str}`
+	updateDisplayResultStr()
+}
+
+function updateDisplayOperationStr(str = displayOperationStr) {
+	displayOperation.textContent = str
+}
+
+function updateDisplayResultStr(str = displayResultStr) {
+	displayResult.textContent = str
 }
