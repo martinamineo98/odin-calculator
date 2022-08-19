@@ -16,7 +16,7 @@ let sum = new Operation('sum', '+', (a, b) => {return parseFloat(a) + parseFloat
 let subtract = new Operation('subtract', '-', (a, b) => {return a - b})
 let multiply = new Operation('multiply', '*', (a, b) => {return a * b})
 let divide = new Operation('divide', '÷', (a, b) => {return (a == 0 || b == 0) ? 'ERROR' : a / b})
-let equal = new Operation('equal', '=', () => {})
+let equal = new Operation('equal', '=', (a) => {return a})
 
 // Populating the #calculator div with the needed buttons
 
@@ -123,6 +123,7 @@ let chosenOp
 let previousOp
 let previousNum1
 let previousNum2
+let previousResult
 
 let num1Str = ''
 let num2Str = ''
@@ -132,25 +133,20 @@ function operate(op = chosenOp) {
 		previousOp = op
 		previousNum1 = num1
 		previousNum2 = num2
-		
+		previousResult = op.fun(num1, num2)
 		result = op.fun(num1, num2)
-		num1 = result
-		num2 = undefined
-		opDone = false
-		resetNumStr()
 		updateDisplayResult(result)
+		resetOp()
 	}
+	
+	console.log(op.fun.length)
+	console.log(op)
 
-	if (op.name == 'equal') {
- 		result = previousOp.fun(previousNum1, previousNum2)
-		num1 = result
-		num2 = undefined
-		opDone = false
-		resetNumStr()
-		updateDisplayResult(result)
-		
-		console.log(result)
+	if (op.fun.length == 1) {
+		updateDisplayResult(previousOp.fun(previousNum1, previousNum2))
 	}
+	
+	// console.log(num1, num2, previousNum1, previousNum2)
 }
 
 function addStrToNum(str) {
@@ -170,6 +166,13 @@ function resetCalculator() {
 	opDone = false
 	
 	resetNumStr()
+}
+
+function resetOp() {
+	num1 = result
+	num2 = undefined
+	opDone = false
+	resetNumStr()	
 }
 
 function resetNumStr() {
