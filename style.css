@@ -85,7 +85,7 @@ body.container {
 	display: grid;
 	grid-auto-rows: 1fr;
 	grid-template-areas: 'display display display display'
-											 'btn-clear btn-negative btn-percentage btn-divide'
+											 'btn-clear btn-clear btn-percentage btn-divide'
 											 'btn-num7 btn-num8 btn-num9 btn-multiply'
 											 'btn-num4 btn-num5 btn-num6 btn-subtract'
 											 'btn-num1 btn-num2 btn-num3 btn-add'
@@ -104,11 +104,24 @@ body.container {
 .calculator-display {
 	align-items: center;
 	background-color: var(--calculator-display-background-color);
-	display: flex;
-	font-size: 2em;
+	display: grid;
 	grid-area: display;
+	grid-template-areas: 'operation'
+											 'result';
 	justify-content: flex-end;
 	padding: 0 15px;
+}
+
+.calculator-display-operation {
+	font-size: .75em;
+	grid-area: operation;
+	justify-self: end;
+}
+
+.calculator-display-result {
+	font-size: 2em;
+	grid-area: result;
+	justify-self: end;
 }
 
 [class*='btn-'] {

@@ -1,74 +1,147 @@
 
+// 1) We need to create a createOperator constructor, and an object for
+// each possible operation.
 
-// 1) The calculator has to be able to ADD, SUBTRACT, MULTIPLY and DIVIDE.
-// 2) operate() takes an operator and 2 numbers and then calls on of the
-// 		above functions on the numbers.
-// 3) The calculator needs a button for each digit, for each operation,
-//		and a button to clear; the calculator also needs a display.
-//		3.1) We also need a function that populate the display.
-// 4) We need to store the first number that is input into the calculator,
-//		and the operation that has been chosen; we then operate on them when
-//		the "=" key is pressed.
-//		4.1) DILEMMA: how to store all these values and call the operate
-//				 function on them.
-//		4.2) ATTENTION: the user should be able to string together several
-//				 operations, with **each pair** of numbers being evaluated at
-//				 a time. The calculaor **should not** evaluate more than a single
-//				 pair of numbers at the time.
-//				 4.2.1) EXAMPLE: you press a button (ex. 1), followed by an operator
-//								button (ex. add), a second number button (ex. 2), and finally
-//								a second operator button (ex. subtract).
-//								We need to evaluate the first pair of numbers (ex. 1 + 2),
-//								then display the result of that calculation on the display,
-//								and finally, use that result as the first number in the new
-//								calculation, along with the second operator.
-//		4.3) ATTENTION: Numbers with long decimals should be rounded.
-//		4.4) ATTENTION: Don't let the calculator be crashed when a user tries
-//				 to divide by 0.
+// N.B. I will treat the '.' button, the one that adds a decimal point to
+// the number, as a number button.
 
+const operatorBtns = []
 
-// Populate the #calculator container div.
+function Operator(name, symbol, fun) {
+	this.name = name
+	this.symbol = symbol
+	this.fun = fun
+	
+	operatorBtns.push(this)
+}
 
-// 1) We need a button from each number from 0 to 9, a button from each
-//		operator (+, -, *, ÷, %), a button to turn the number negative,
-//		a button to add a decimal point, and a button to clear.
-// 2) Each button needs its own event listener on click.
-// 3) I will be using CSS Grid so I want each button to have its own class.
+let addBtn = new Operator('add', '+', function(a, b) {return a + b})
+let subtractBtn = new Operator('subtract', '-', function(a, b) {return a - b})
+let multiplyBtn = new Operator('multiply', '*', function(a, b) {return a * b})
+let divideBtn = new Operator('divide', '÷', function(a, b) {return a * b})
+let percentageBtn = new Operator('percentage', '%', function(a) {divideBtn.fun(a, 100)})
+// let negativeBtn = new Operator('negative', '+/-', function(a) {return -a})
+let equalBtn = new Operator('equal', '=', function(e) {console.log(e)})
+let clearBtn = new Operator('clear', 'ac', function(e) {console.log(e)})
 
+// 2) We need to populate the #calculator div with buttons for each number
+//		and each operator. 
 
 const container = document.querySelector('#calculator')
 
-
-function createNumBtn() {
+!function createNumBtn() {
 	for (let index = 0; index <= 9; index++) {
 		let numBtn = document.createElement('button')
-				numBtn.textContent = index
 				numBtn.classList.toggle(`btn-num${index}`)
 				numBtn.style.gridArea = `btn-num${index}`
+				numBtn.textContent = index
+				
+				numBtn.addEventListener('click', () => {
+					addNumberToString(index)
+				})
 		
 		container.appendChild(numBtn)
 	}
-}
+}()
 
-
-createNumBtn()
-
-
-function createOperatorBtn() {
-	const operatorSymbol = ['+', '-', '*', '÷', '%', '.', '=', 'ac', '+/-']
-	const operatorName = ['add', 'subtract', 'multiply', 'divide', 'percentage', 'decimal', 'equal', 'clear', 'negative']
-	
-	for (let index = 0; index < operatorSymbol.length; index++) {
-		let operatorBtn = document.createElement('button')
-				operatorBtn.textContent = `${operatorSymbol[index]}`
-				operatorBtn.classList.toggle(`btn-${operatorName[index]}`)
-				operatorBtn.style.gridArea = `btn-${operatorName[index]}`
-		
-		container.appendChild(operatorBtn)
+!function createOperatorBtn(){
+	for (let index = 0; index < operatorBtns.length; index++) {
+		let btn = document.createElement('button')
+				btn.classList.toggle(`btn-${operatorBtns[index].name}`)
+				btn.style.gridArea = `btn-${operatorBtns[index].name}`
+				btn.textContent = `${operatorBtns[index].symbol}`
+				
+				btn.addEventListener('click', () => {
+					operate(operatorBtns[index].fun)
+				})
+				
+		container.appendChild(btn)
 	}
+}()
+
+!function createDecimalBtn() {
+	let decimalBtn = document.createElement('button')
+			decimalBtn.classList.toggle('btn-decimal')
+			decimalBtn.gridArea = 'btn-decimal'
+			decimalBtn.textContent = '.'
+			
+			decimalBtn.addEventListener('click', () => {
+				addDecimalPointToString()
+			})
+			
+	container.appendChild(decimalBtn)
+}()
+
+// 4) The operate() function evaluates the operation between two given
+//		numbers. When I click on a number (or a series of numbers), they
+//		are inserted in a string called num1. When I click on a operator,
+//		the chosen operator function is inserted in a variable called
+// 		chosenOperator. When num1 and chosenOperator both exists, when a
+// 		click on another number (or another series of numbers), it's
+// 		inserted in a num2 variable.
+//		Each time I click on an operator button, the operate() function is
+// 		invoked. If the length of num1 and num2 is more than 0, it gives me
+// 		the result of the operation. The result is then inserted in its own
+//		variable and displayed on the screen.
+
+//		If the length of the result variable is more than 0, I need to
+//		invoke the operation between the num2 variable and the result.
+
+//		If the given operation only requires one argument, and the length
+// 		of the num2 variable is less than or equal 0, I will pass this function
+//		the num1 variable, otherwise I will pass the result variable as an
+//		argument.
+
+//		Exception to this is the negativeBtn.fun(), if the length of num2
+// 		is less than or equal 0, I will pass it the num1 variable, otherwise
+//		the num2 one.
+
+//		I use the length of the string to verify which variable was last
+//		used, or to verify if it exists.
+
+let num1 = ''
+let num2 = ''
+let result = ''
+let chosenOperation
+
+function operate(fun) {
+	
 }
 
+// 4.1) To verify in which variable I need to insert the number, I created
+//			a helper function called addNumberToString. If the chosenOperator
+//			variable is not undefined, it adds it to num2, otherwise it adds
+//			it to num1. I will invoke this function each time a numBtn is
+//			clicked.
 
-createOperatorBtn()
+// 4.2) The addDecimalPointToString function works similarly but it also
+//			checks if the correct variable already has a decimal point. To do
+//			this I also created another helper function called checkIfStringContains.
 
+function addNumberToString(x) {
+	if (chosenOperation) {
+		num2 += x
+	} else {
+		num1 += x
+	}
+	
+	console.log(num1, num2)
+}
 
+function addDecimalPointToString() {
+	if (chosenOperation) {
+		if (!checkIfStringContains(num2, '.')) {
+			num2 += '.'
+		}
+	} else {
+		if (!checkIfStringContains(num1, '.')) {
+			num1 += '.'
+		}
+	}
+	
+	console.log(num1, num2)
+}
+
+function checkIfStringContains(x, y) {
+	return x.includes(y)
+}
