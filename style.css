@@ -1,25 +1,20 @@
 
-
 /* ---------------------------------------------------------- IMPORTS */
-
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Press+Start+2P&display=swap');
 
-
 /* -------------------------------------------------------- VARIABLES */
-
 
 :root {
 	--main-font-family: 'JetBrains Mono', monospace;
 	--alternative-font-family: 'Press Start 2P', cursive;
-	--calculator-font-color: #FFFFFF;
-	--calculator-background-color: #FFFFFF;
-	--calculator-display-background-color: hsl(100deg, 100%, 80%);
+	--calculator-display-background-color: hsl(0deg, 0%, 90%);
+	--calculator-display-border-color: hsl(0deg, 0%, 95%);
+	--btn-background-color: hsl(0deg, 0%, 90%);
+	--btn-border-color: hsl(0deg, 0%, 95%);
 }
 
-
 /* ------------------------------------------------------------ RESET */
-
 
 *,
 *::before,
@@ -50,9 +45,7 @@ table {
   border-spacing: 0;
 }
 
-
 /* ---------------------------------------------------------- GENERAL */
-
 
 body {
 	background-color: #FFFFFF;
@@ -68,62 +61,65 @@ body.container {
 	width: 100vw;
 }
 
-
 /* ------------------------------------------------------- CALCULATOR */
-
 
 #calculator {
 	aspect-ratio: .75;
-	background-color: var(--calculator-background-color);
-	column-gap: 5px;
+	column-gap: 10px;
 	display: grid;
-	grid-auto-rows: 1fr;
+	font-family: var(--alternative-font-family);
+	font-weight: bold;
+	grid-auto-columns: 1fr;
+	grid-auto-rows: 2fr 1fr 1fr 1fr 1fr 1fr;
 	grid-template-areas: 'display display display display'
-											 'btn-num7 btn-num8 btn-num9 btn-divide'
-											 'btn-num4 btn-num5 btn-num6 btn-multiply'
-											 'btn-num3 btn-num2 btn-num1 btn-subtract'
-											 'btn-decimal btn-num0 btn-equal btn-sum'
-											 'btn-clear btn-clear btn-clear btn-clear';
-	height: 25vw;
-	row-gap: 5px;
+											 'btn-del btn-ac btn-exp btn-div'
+											 'btn-num7 btn-num8 btn-num9 btn-mul'
+											 'btn-num4 btn-num5 btn-num6 btn-sub'
+											 'btn-num1 btn-num2 btn-num3 btn-sum'
+											 'btn-num0 btn-dec btn-equ btn-neg';
+	row-gap: 10px;
+	width: 25%;
 }
 
-#calculator,
-#calculator * {
-	color: var(--calculator-font-color);
-	font-family: var(--alternative-font-family);
-	text-shadow: 2px 2px 0 hsla(0, 0%, 0%, 25%);
+#calculator > * {
+	color: #FFFFFF;
+	text-shadow: 2px 2px 0 hsla(0deg, 0%, 0%, 25%);
 }
 
 .calculator-display {
-	align-items: center;
+	align-items: flex-end;
 	background-color: var(--calculator-display-background-color);
-	display: grid;
+	border: 10px groove var(--calculator-display-border-color);
+	display: flex;
+	flex-flow: column;
 	grid-area: display;
-	grid-template-areas: 'operation'
-											 'result';
-	justify-content: flex-end;
-	padding: 0 15px;
+	justify-content: center;
+	padding-right: .5ch;
+	row-gap: 1ch;
 }
 
-.calculator-display-history {
-	font-size: .75em;
-	grid-area: operation;
-	justify-self: end;
+.calculator-operation {
+	font-size: 1em;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
-.calculator-display-result {
-	font-size: 2em;
-	grid-area: result;
-	justify-self: end;
+.calculator-result {
+	font-size: 3em;
 }
 
-[class*='btn-'] {
-	font-weight: bold;
-	transition: all .5s ease-in-out;
+[class*='btn'] {
+	background-color: var(--btn-background-color);
+	border: 5px outset var(--btn-border-color);
 }
 
-[class*='btn-']:hover,
-[class*='btn-']:focus {
+[class*='btn']:hover,
+[class*='btn']:focus {
 	cursor: pointer;
+}
+
+[class*='btn']:active {
+	border-style: inset;
 }
