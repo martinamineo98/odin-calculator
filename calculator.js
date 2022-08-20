@@ -197,6 +197,7 @@ function removeStr() {
 	if (arr[0] != undefined) {
 		if (arr[2] == undefined || arr[2] == '' || arr[2] == '-') {
 			arr[0] = arr[0].slice(0, -1)
+			arr[2] = undefined
 			updateDisplayResult(arr[0])
 		}
 		
