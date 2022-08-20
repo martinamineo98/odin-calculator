@@ -8,9 +8,10 @@
 :root {
 	--main-font-family: 'JetBrains Mono', monospace;
 	--alternative-font-family: 'Press Start 2P', cursive;
-	--calculator-display-background-color: hsl(175deg, 100%, 90%);
-	--btn-op-background-color: hsl(150deg, 100%, 90%);
-	--btn-num-background-color: hsl(125deg, 100%, 90%);
+	--calculator-display-background-color: hsl(0deg, 0%, 90%);
+	--calculator-display-border-color: hsl(0deg, 0%, 95%);
+	--btn-background-color: hsl(0deg, 0%, 90%);
+	--btn-border-color: hsl(0deg, 0%, 95%);
 }
 
 /* ------------------------------------------------------------ RESET */
@@ -64,33 +65,61 @@ body.container {
 
 #calculator {
 	aspect-ratio: .75;
-	column-gap: 5px;
-	font-family: var(--alternative-font-family);
+	column-gap: 10px;
 	display: grid;
+	font-family: var(--alternative-font-family);
+	font-weight: bold;
+	grid-auto-columns: 1fr;
+	grid-auto-rows: 2fr 1fr 1fr 1fr 1fr 1fr;
 	grid-template-areas: 'display display display display'
-											 'ac ac neg neg'
-											 'num7 num8 num9 div'
-											 'num4 num5 num6 mul'
-											 'num1 num2 num3 sub'
-											 'num0 dec equ sum';
-	width: 20%;
-	row-gap: 5px;
+											 'btn-del btn-ac btn-exp btn-div'
+											 'btn-num7 btn-num8 btn-num9 btn-mul'
+											 'btn-num4 btn-num5 btn-num6 btn-sub'
+											 'btn-num1 btn-num2 btn-num3 btn-sum'
+											 'btn-num0 btn-dec btn-equ btn-neg';
+	row-gap: 10px;
+	width: 25%;
+}
+
+#calculator > * {
+	color: #FFFFFF;
+	text-shadow: 2px 2px 0 hsla(0deg, 0%, 0%, 25%);
 }
 
 .calculator-display {
+	align-items: flex-end;
 	background-color: var(--calculator-display-background-color);
+	border: 10px groove var(--calculator-display-border-color);
+	display: flex;
+	flex-flow: column;
 	grid-area: display;
+	justify-content: center;
+	padding-right: .5ch;
+	row-gap: 1ch;
 }
 
-[class*='btn-']:hover,
-[class*='btn-']:focus {
+.calculator-operation {
+	font-size: 1em;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.calculator-result {
+	font-size: 3em;
+}
+
+[class*='btn'] {
+	background-color: var(--btn-background-color);
+	border: 5px outset var(--btn-border-color);
+}
+
+[class*='btn']:hover,
+[class*='btn']:focus {
 	cursor: pointer;
 }
 
-.btn-op {
-	background-color: var(--btn-op-background-color);
-}
-
-.btn-num {
-	background-color: var(--btn-num-background-color);
+[class*='btn']:active {
+	border-style: inset;
 }
